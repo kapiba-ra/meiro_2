@@ -1,69 +1,21 @@
 #include "Stage.h"
 #include "Player.h"
 #include <iomanip> 
+#include <fstream>
+#include <sstream>
 
 Stage::Stage(Game* game)
 	: Scene(game)
+    , currentStage(1)
 {
 }
 
 void Stage::init()
 {
-	StageData ="\
-##########\n\
-#p   #   #\n\
-#  #   # #\n\
-# ###### #\n\
-#  G#k   #\n\
-##########\n";
-	mGame->player()->SetPpos(Vector2(1,1));
-
-    // 四角形のみに対応...
-    unsigned __int64 StageH = std::count(StageData.begin(), StageData.end(), '\n');
-    int StageW = static_cast<int>(StageData.find('\n'));
-    
-	Objects ={ StageH, std::vector<Object>(StageW)};
-
-    // Objectsの登録
-    int h = 0;
-    int w = 0;
-    for (char c : StageData)
-    {
-        if (c == '\n')
-        {
-            h++;
-            w = 0;
-        }
-        else if (h < StageH && w < StageW)
-        {
-            switch (c)
-            {
-            case '#':
-                Objects[h][w] = Object::E_Wall;
-                break;
-            case ' ':
-                Objects[h][w] = Object::E_Space;
-                break;
-            case 'p':
-                Objects[h][w] = Object::E_Player;
-                mGame->player()->SetPpos(Vector2(w, h));    // player位置の設定
-                break;
-            case 'G':
-                Objects[h][w] = Object::E_Goal;
-                break;
-            case 'k':
-                Objects[h][w] = Object::E_Key;
-                break;
-            default:
-                Objects[h][w] = Object::E_Space;
-                break;
-            }
-            w++;
-        }
-    }
-    system("cls");
-    std::cout << "Stage_01" << std::endl;
-    std::cout << StageData << std::endl;
+    Change = false;
+    GetKey = false;
+    LoadStageData("stage_" + std::to_string(currentStage) + ".txt");
+    mGame->player()->SetPpos(Vector2(1, 1));
 }
 
 void Stage::processInput()
@@ -78,10 +30,10 @@ void Stage::update()
     Vector2 curPpos = mGame->player()->GetPpos();
     Vector2 newPpos = mGame->player()->GetPposNext();
 
-    // 更新後が壁の位置
+    // 更新後が壁(#)の位置
     if (Objects[newPpos.y][newPpos.x] == Object::E_Wall)
     {
-        return;     //updateしない
+        return;
     }
     // 更新後が鍵(k)の位置
     else if (Objects[newPpos.y][newPpos.x] == Object::E_Key)
@@ -89,7 +41,7 @@ void Stage::update()
         std::cout << "鍵をかくとくした" << std::endl;
         GetKey = true;
     }
-    // 更新後がゴールの位置
+    // 更新後がゴール(G)の位置
     else if (Objects[newPpos.y][newPpos.x] == Object::E_Goal)
     {
         // 鍵の有無によって変わる処理
@@ -120,7 +72,7 @@ void Stage::draw()
 
     for (int i = 0; i < Objects.size(); i++)
     {
-        coord.Y = i+1;  // Stage_01等の表示を先頭にするため＋１
+        coord.Y = i+1;  // 2行目から描画
         for (int j = 0; j < Objects[i].size(); j++)
         {
             coord.X = j;
@@ -157,6 +109,72 @@ void Stage::nextScene()
 {
     if (Change)
     {
-	    mGame->ChangeScene(Game::E_GameClear);
+        if (currentStage >= 3)
+        {
+            mGame->ChangeScene(Game::E_GameClear);
+        }
+        else
+        {
+            ChangeStage();  // 次のステージに変更
+        }
     }
+}
+
+void Stage::LoadStageData(const std::string& filename)
+{
+    std::ifstream file(filename);
+    std::string line;
+    StageData.clear();
+    while (std::getline(file, line))
+    {
+        StageData.push_back(line);
+    }
+    file.close();
+
+    unsigned __int64 StageH = StageData.size();
+    int StageW = static_cast<int>(StageData[0].length());
+
+    Objects = std::vector<std::vector<Object>>(StageH, std::vector<Object>(StageW));
+
+    for (int i = 0; i < StageH; ++i)
+    {
+        for (int j = 0; j < StageW; ++j)
+        {
+            switch (StageData[i][j])
+            {
+            case '#':
+                Objects[i][j] = Object::E_Wall;
+                break;
+            case ' ':
+                Objects[i][j] = Object::E_Space;
+                break;
+            case 'p':
+                Objects[i][j] = Object::E_Player;
+                mGame->player()->SetPpos(Vector2(i, j));    // player位置の設定
+                break;
+            case 'G':
+                Objects[i][j] = Object::E_Goal;
+                break;
+            case 'k':
+                Objects[i][j] = Object::E_Key;
+                break;
+            default:
+                Objects[i][j] = Object::E_Space;
+                break;
+            }
+        }
+    }
+
+    system("cls");
+    std::cout << "Stage_" << std::setw(2) << std::setfill('0') << currentStage << std::endl;
+    for (const auto& line : StageData)
+    {
+        std::cout << line << std::endl;
+    }
+}
+
+void Stage::ChangeStage()
+{
+    currentStage++;
+    init();
 }

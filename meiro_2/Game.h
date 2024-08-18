@@ -15,6 +15,7 @@ public:
 		E_Title,
 		E_Stage,
 		E_GameClear,
+
 		E_SceneNums,
 	};
 	void ChangeScene(SCENE_ID id);
@@ -24,7 +25,7 @@ private:
 	SCENE_ID CurSceneId;
 
 
-public:	// getter
+public:
 	class Player* player() { return playerObj; }
 	void EndGame() { mIsRunning = false; }
 private:

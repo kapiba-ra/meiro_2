@@ -24,9 +24,13 @@ public:
         E_Key,
     };
 
+    void LoadStageData(const std::string& filename);
+    void ChangeStage();
+
 private:
-    std::string StageData;
-    std::vector< std::vector<Object>> Objects;
+    std::vector<std::string> StageData;
+    std::vector<std::vector<Object>> Objects;
+    int currentStage;       // 現在のステージのインデックス
     bool Change = false;    // Stageの切り替え
     bool GetKey = false;    // 鍵(k)の獲得
 };

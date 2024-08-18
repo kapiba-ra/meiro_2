@@ -46,15 +46,3 @@ void Game::ChangeScene(SCENE_ID id)
 	CurSceneId = id;
 	Scenes[CurSceneId]->init();
 }
-
-	// シーンがTitleならSpaceキーを押すとからStageへ
-	// シーンがStageならActorクラスのProcessInput()を呼び出す(名前変えてもいいかも)
-	// StageではWASDを押すとpの移動方向px,pyが変更される
-	// 基本的にはActorのupdateを呼び出すだけかな。なので以下もその中身の内容です
-	// pのpos(structで持っておこう)をdx,dyに基づいて更新する。
-	// 更新後のplayerの位置によってplayerstateを管理する
-	// もしWallなら更新しない。もしGoalならplayerのposを更新する。
-	// もしspaceならplayerのposを更新する。
-	// 移動先のstateによって変える
-	// Goal : 移動後の場所にpを表示、SceneをClearに遷移させる。
-	// Space : 移動後の場所にpを表示
