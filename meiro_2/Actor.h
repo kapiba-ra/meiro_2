@@ -1,5 +1,6 @@
 #pragma once
 
+// ˆê‰ActorŠî’êƒNƒ‰ƒX‚ğì‚Á‚Ä‚¨‚¢‚½
 class Actor
 {
 public:

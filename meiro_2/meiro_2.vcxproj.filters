@@ -67,6 +67,5 @@
     <ClInclude Include="Actor.h">
       <Filter>actor\base</Filter>
     </ClInclude>
-    <ClInclude Include="Search.h" />
   </ItemGroup>
 </Project>

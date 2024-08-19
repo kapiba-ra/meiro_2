@@ -1,6 +1,6 @@
 #pragma once
-#include <conio.h>  // for _getch()
-#include <windows.h>
+#include <conio.h>      // _getch() ‚Ì‚½‚ß
+#include <windows.h>    // StageƒNƒ‰ƒX‚ÅŽg‚Á‚Ä‚¢‚é
 #include <iostream>
 #include "Game.h"
 #include <cstdlib>

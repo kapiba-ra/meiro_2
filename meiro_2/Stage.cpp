@@ -15,7 +15,6 @@ void Stage::init()
     Change = false;
     GetKey = false;
     LoadStageData("stage_" + std::to_string(currentStage) + ".txt");
-    mGame->player()->SetPpos(Vector2(1, 1));
 }
 
 void Stage::processInput()
@@ -28,7 +27,9 @@ void Stage::update()
     mGame->player()->update();
 
     Vector2 curPpos = mGame->player()->GetPpos();
-    Vector2 newPpos = mGame->player()->GetPposNext();
+    // 方向は現状使っていないが,押せる物体の実装等を見越して
+    Vector2 Pdir = mGame->player()->GetPdir();
+    Vector2 newPpos = curPpos + Pdir;
 
     // 更新後が壁(#)の位置
     if (Objects[newPpos.y][newPpos.x] == Object::E_Wall)
@@ -109,7 +110,7 @@ void Stage::nextScene()
 {
     if (Change)
     {
-        if (currentStage >= 3)
+        if (currentStage >= 3)  // クリア時のステージ番号
         {
             mGame->ChangeScene(Game::E_GameClear);
         }
@@ -122,6 +123,7 @@ void Stage::nextScene()
 
 void Stage::LoadStageData(const std::string& filename)
 {
+    // ファイルの読み込み
     std::ifstream file(filename);
     std::string line;
     StageData.clear();
@@ -131,7 +133,8 @@ void Stage::LoadStageData(const std::string& filename)
     }
     file.close();
 
-    unsigned __int64 StageH = StageData.size();
+    // ステージのデータは注意して用意する必要がある(StageData[0].length())
+    int StageH = StageData.size();
     int StageW = static_cast<int>(StageData[0].length());
 
     Objects = std::vector<std::vector<Object>>(StageH, std::vector<Object>(StageW));
@@ -150,7 +153,7 @@ void Stage::LoadStageData(const std::string& filename)
                 break;
             case 'p':
                 Objects[i][j] = Object::E_Player;
-                mGame->player()->SetPpos(Vector2(i, j));    // player位置の設定
+                mGame->player()->SetPpos(Vector2(j, i));    // player位置の設定
                 break;
             case 'G':
                 Objects[i][j] = Object::E_Goal;
@@ -166,7 +169,9 @@ void Stage::LoadStageData(const std::string& filename)
     }
 
     system("cls");
+    // Stage名の表示 現状２桁まで
     std::cout << "Stage_" << std::setw(2) << std::setfill('0') << currentStage << std::endl;
+    // ここはtxtファイルをそのまま表示
     for (const auto& line : StageData)
     {
         std::cout << line << std::endl;
@@ -175,6 +180,6 @@ void Stage::LoadStageData(const std::string& filename)
 
 void Stage::ChangeStage()
 {
-    currentStage++;
-    init();
+    currentStage++;     // 次のステージに行って
+    init();             // 初期化
 }

@@ -7,7 +7,6 @@ GameClear::GameClear(Game* game)
 
 void GameClear::processInput()
 {
-	// 本当は別の場所でコンストラクタで表示させたいかも
 	std::cout << "GameClear!! 'q'で終了" << std::endl;
 	char input = 'a';	// 初期化 aに意味はない
 	while (input != 'q')

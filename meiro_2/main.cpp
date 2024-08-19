@@ -13,3 +13,4 @@ int main()
 	game.Shutdown();
 	return 0;
 }
+// ‚±‚±‚Í Game ProgrammingC++ ‚É‘¥‚Á‚½

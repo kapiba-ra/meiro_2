@@ -28,8 +28,8 @@ public:
     void ChangeStage();
 
 private:
-    std::vector<std::string> StageData;
-    std::vector<std::vector<Object>> Objects;
+    std::vector<std::string> StageData;         // 各ステージのデータを保存する Load用
+    std::vector<std::vector<Object>> Objects;   // ステージの情報を管理する
     int currentStage;       // 現在のステージのインデックス
     bool Change = false;    // Stageの切り替え
     bool GetKey = false;    // 鍵(k)の獲得

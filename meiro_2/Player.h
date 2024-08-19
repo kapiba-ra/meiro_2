@@ -12,13 +12,12 @@ public:
     void update()override;
 
     Vector2 GetPpos() const { return Ppos; }
-    Vector2 GetPposNext() const { return PposNext; }
+    Vector2 GetPdir() const { return Pdir; }
     void SetPpos(const Vector2& p) { Ppos = p; }
-    void SetPposNext(const Vector2& p) { PposNext = p; }
 
 private:
-    Vector2 Ppos;
-    Vector2 PposNext;
+    Vector2 Ppos;       // Player position
+    Vector2 Pdir;       // Player direction
     char Input;
 };
 

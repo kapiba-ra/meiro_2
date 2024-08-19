@@ -15,20 +15,20 @@ void Player::processInput()
 
 void Player::update()
 {
-	PposNext = Ppos;
+	Pdir = (0, 0);
 	switch (Input)
 	{
 	case 'w':	// è„
-		PposNext.y -= 1;
+		Pdir.y = -1;
 		break;
 	case 's':	// â∫
-		PposNext.y += 1;
+		Pdir.y = 1;
 		break;
 	case 'a':	// ç∂
-		PposNext.x -= 1;
+		Pdir.x = -1;
 		break;
 	case 'd':	// âE
-		PposNext.x += 1;
+		Pdir.x = 1;
 		break;
 	default :
 		break;

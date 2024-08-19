@@ -143,7 +143,6 @@
     <ClInclude Include="GameClear.h" />
     <ClInclude Include="Player.h" />
     <ClInclude Include="Scene.h" />
-    <ClInclude Include="Search.h" />
     <ClInclude Include="Stage.h" />
     <ClInclude Include="Title.h" />
     <ClInclude Include="Vector2.h" />
